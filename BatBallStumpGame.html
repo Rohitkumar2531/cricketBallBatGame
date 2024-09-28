@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cricket Game</title>
+  <link rel="stylesheet" href="BatBallStump.css">
+ 
+</head>
+<body>
+  <h1>Bat Ball Stump Game</h1>
+
+  
+
+  <button 
+  class="choice-button" 
+  onclick=" 
+ let computerChoice=generateComputerChoice();
+let resultmsg = getResult('Bat',computerChoice);
+showResult('Bat', computerChoice,resultmsg);
+  "><img src="bat.jpeg" alt="Bat Image" class="choice-image">
+</button>
+
+
+  <button class="choice-button" onclick=" 
+  computerChoice=generateComputerChoice();
+  resultmsg = getResult('Ball',computerChoice);
+showResult('Ball', computerChoice,resultmsg);
+  ">
+  <img src="ball.jpeg" alt="Ball Image" class="choice-image">
+</button>
+  
+  <button class="choice-button" onclick=" 
+  computerChoice=generateComputerChoice();
+ resultmsg = getResult('Stump',computerChoice);
+showResult('Stump', computerChoice,resultmsg);
+  "><img src="Stump.jpeg" alt="stump Image" class="choice-image">
+</button>
+    
+   
+
+    <h3 id="user-move"></h3>
+    <h3 id="computer-move"></h3>
+    <h3 id="result"></h3>
+    <h3 id="score"></h3>
+
+    <button onclick="localStorage.clear()
+    resetScore();
+    ">Reset</button>
+
+
+
+<script>
+  let scoreStr = localStorage.getItem('score');
+  let score;
+  resetScore(scoreStr);
+
+  function resetScore(scoreStr){
+    score= scoreStr ? JSON.parse(scoreStr) : {
+    win:0,
+    lost:0,
+    tie:0,
+   };
+  
+  score.displayScore=function(){
+    return `Score: won:${score.win},lost:${score.lost},tie:${score.tie}`;
+  };
+
+  showResult();
+}
+  
+  function generateComputerChoice(){
+    let computerChoice;
+
+    let randomNumber=Math.random() *3;
+   
+  if(randomNumber>0 && randomNumber<=1){
+     return 'Bat';
+  } else if(randomNumber >1 && randomNumber <= 2){
+     return'Ball';
+  }else{
+    return'Stump'
+  }
+    
+  }
+  function getResult(userMove,computerMove){
+    if(userMove==='Bat'){
+      if(computerMove==='Ball'){
+        score.win= score +1;
+        return'user won';
+
+      }else if(computerMove==='Bat'){
+        score.tie++;
+        return `It's a tie`;
+      }else if (computerMove==='Stump'){
+        score.lost++;
+        return 'computer has won';
+      }
+    } else if(userMove==='Ball'){
+      if(computerMove==='Ball'){
+        score.tie++;
+        return `It's a tie`;
+      }else if(computerMove==='Bat'){
+        score.lost++;
+        return 'computer has won'; 
+      }else if (computerChoice==='Stump'){
+        score.win++;
+        return 'User Won';
+      }
+    } else{
+      if(computerMove==='Ball'){
+        score.lost++;
+        return'Computer Has Won';
+      }else if(computerMove==='Bat'){
+        score.win++;
+        return 'User Won';
+      } else if(computerMove==='Stump'){
+        score.tie++;
+        return`It's a tie`;
+      }
+    }  
+  }
+
+  function showResult(userMove,computerMove,resultmsg){
+    localStorage.setItem('score',JSON.stringify(score));
+    document.querySelector('#user-move').innerText= userMove !== undefined?`you have chosen ${userMove}` :'';
+
+    document.querySelector('#computer-move').innerText=computerMove!== undefined?
+    `Computer choice is ${computerMove} `:'';
+
+    document.querySelector('#result').innerText=resultmsg =resultmsg ||'';
+
+    document.querySelector('#score').innerText=score.displayScore();
+   
+  }
+</script>
+<footer>
+  <hr>
+  <div>This Game is developed by Rohit Singh</div>
+  <div >&copy;copyright</div>
+</footer>
+</body>
+</html>
